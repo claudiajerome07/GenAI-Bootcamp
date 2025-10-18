@@ -170,7 +170,7 @@ Here’s what we accomplished:
 The backend is powered by **Node.js + Express**, exposing RESTful endpoints for each AI module.
 
 ### 🧠 Base URL
-http://localhost:8080/api
+https://civicconnectai.onrender.com/api
 
 
 ---
