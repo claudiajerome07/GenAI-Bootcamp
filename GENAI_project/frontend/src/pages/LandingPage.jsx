@@ -25,11 +25,14 @@ const LandingPage = () => {
     setLoading(true);
 
     try {
-      const response = await fetch("https://civicconnectai.onrender.com/api/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: userMessage.text }),
-      });
+      const response = await fetch(
+        "https://civicconnectai.onrender.com/api/chat",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message: userMessage.text }),
+        }
+      );
 
       const data = await response.json();
 
@@ -51,6 +54,52 @@ const LandingPage = () => {
 
   const handleKeyPress = (e) => {
     if (e.key === "Enter") handleSend();
+  };
+
+  const renderMessageContent = (msg) => {
+    if (typeof msg.text === "string") {
+      return (
+        <span
+          className={
+            msg.sender === "user"
+              ? "text-blue-700 font-medium"
+              : "text-blue-600 italic"
+          }
+        >
+          {msg.text}
+        </span>
+      );
+    }
+
+    if (msg.text && typeof msg.text === "object") {
+      // Handle structured response
+      const { summary, sections, ...rest } = msg.text;
+
+      return (
+        <div className="text-blue-700 italic">
+          {summary && <p className="font-semibold">{summary}</p>}
+
+          {sections &&
+            sections.map((section, sIdx) => (
+              <div key={sIdx} className="mt-2">
+                <h4 className="font-bold">{section.title}</h4>
+                <ul className="list-disc ml-4">
+                  {section.content.map((line, lIdx) => (
+                    <li key={lIdx}>{line}</li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+
+          {/* Render any other object fields safely */}
+          {Object.keys(rest).length > 0 && (
+            <pre>{JSON.stringify(rest, null, 2)}</pre>
+          )}
+        </div>
+      );
+    }
+
+    return null;
   };
 
   return (
@@ -75,11 +124,12 @@ const LandingPage = () => {
           Empowering Citizens, Simplifying Governance
         </h2>
         <p className="text-center text-sm md:text-base text-blue-600 mb-8">
-          Ask about laws, find eligible schemes, or translate government info instantly.
+          Ask about laws, find eligible schemes, or translate government info
+          instantly.
         </p>
 
         {/* Chatbox */}
-        <div id="chatbox-section" className="w-full max-w-xl bg-white/80 backdrop-blur-xl rounded-2xl p-6 shadow-xl border border-blue-200">
+        <div className="w-full max-w-xl bg-white/80 backdrop-blur-xl rounded-2xl p-6 shadow-xl border border-blue-200">
           {/* Messages */}
           <div className="h-64 overflow-y-auto text-left p-3 rounded-lg bg-gradient-to-br from-blue-100/60 to-white mb-4 border border-blue-200">
             {messages.map((msg, idx) => (
@@ -89,32 +139,7 @@ const LandingPage = () => {
                     CivicConnect AI:{" "}
                   </span>
                 )}
-                {typeof msg.text === "string" ? (
-                  <span
-                    className={
-                      msg.sender === "user"
-                        ? "text-blue-700 font-medium"
-                        : "text-blue-600 italic"
-                    }
-                  >
-                    {msg.text}
-                  </span>
-                ) : msg.text && typeof msg.text === "object" ? (
-                  <div className="text-blue-700 italic">
-                    {msg.text.summary && <p className="font-semibold">{msg.text.summary}</p>}
-                    {msg.text.sections &&
-                      msg.text.sections.map((section, sIdx) => (
-                        <div key={sIdx} className="mt-2">
-                          <h4 className="font-bold">{section.title}</h4>
-                          <ul className="list-disc ml-4">
-                            {section.content.map((line, lIdx) => (
-                              <li key={lIdx}>{line}</li>
-                            ))}
-                          </ul>
-                        </div>
-                      ))}
-                  </div>
-                ) : null}
+                {renderMessageContent(msg)}
               </div>
             ))}
             {loading && <p className="text-blue-600 italic">Thinking...</p>}
@@ -153,7 +178,9 @@ const LandingPage = () => {
               Simplify a Law
             </button>
             <button
-              onClick={() => setInput("Translate this government notice into Tamil")}
+              onClick={() =>
+                setInput("Translate this government notice into Tamil")
+              }
               className="flex-1 bg-blue-100 hover:bg-blue-200 text-blue-800 transition rounded-xl py-2 font-medium shadow-sm"
             >
               Translate Document
