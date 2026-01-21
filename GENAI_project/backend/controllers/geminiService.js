@@ -1,9 +1,14 @@
-const axios = require('axios');
 require('dotenv').config();
+const axios = require('axios');
 
-const MODEL_NAME = process.env.MODEL_NAME; 
+const MODEL_NAME = process.env.MODEL_NAME || 'gemini-2.5-flash';
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
-const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL_NAME}:generateContent`;
+
+if (!GEMINI_API_KEY) {
+    console.error('ERROR: GEMINI_API_KEY is not set in environment variables');
+}
+
+const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1/models/${MODEL_NAME}:generateContent`;
 
 const generateResponse = async (prompt, temperature = 0.3, top_p = 0.7) => {
     try {
