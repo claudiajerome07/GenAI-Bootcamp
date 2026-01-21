@@ -1,8 +1,7 @@
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
-const { handleUnifiedChat, handleLocalLanguageChat, handleTalk2GovChat } = require('./Services/aiService');
-const lawbotRoutes = require('./routes/lawbotRoutes');
+const { handleUnifiedChat, handleLawBotChat, handleLocalLanguageChat, handleTalk2GovChat } = require('./Services/aiService');
 
 const app = express();
 
@@ -17,7 +16,7 @@ app.use(cors());
 app.use(express.json());
 
 app.post('/api/chat', handleUnifiedChat);
-app.use('/api/lawbot', lawbotRoutes);
+app.post('/api/lawbot', handleLawBotChat);
 app.post('/api/talk2gov', handleTalk2GovChat);
 app.post('/api/translate', handleLocalLanguageChat);
 
