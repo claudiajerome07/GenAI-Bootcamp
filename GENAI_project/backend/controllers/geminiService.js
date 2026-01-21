@@ -2,24 +2,30 @@ require('dotenv').config();
 const axios = require('axios');
 
 const MODEL_NAME = process.env.MODEL_NAME || 'gemini-2.5-flash';
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY?.trim();
+
+console.log('🔧 Gemini Configuration:');
+console.log(`   Model: ${MODEL_NAME}`);
+console.log(`   API Key: ${GEMINI_API_KEY ? '✓ Loaded' : '✗ NOT FOUND'}`);
 
 if (!GEMINI_API_KEY) {
-    console.error('ERROR: GEMINI_API_KEY is not set in environment variables');
+    console.error('❌ ERROR: GEMINI_API_KEY is not set in environment variables');
 }
 
 const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1/models/${MODEL_NAME}:generateContent`;
+console.log(`   URL: ${GEMINI_API_URL}`);
 
 const generateResponse = async (prompt, temperature = 0.3, top_p = 0.7) => {
     try {
+        console.log('📤 Sending request to Gemini API...');
+        
         const response = await axios.post(
             GEMINI_API_URL,
             {
                 contents: [{ parts: [{ text: prompt }] }],
                 generationConfig: {
-                    temperature: temperature,  // controls randomness
-                    topP: top_p,               // nucleus sampling
-                    // maxOutputTokens: 3000    // optional, adjust if needed
+                    temperature: temperature,
+                    topP: top_p,
                 }
             },
             {
@@ -30,17 +36,12 @@ const generateResponse = async (prompt, temperature = 0.3, top_p = 0.7) => {
             }
         );
 
-        // Safe extraction
-        // const candidates = response.data?.candidates;
-        // const text = candidates?.[0]?.content?.[0]?.text || "";
-
-        const text = response.data?.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || "";
-        // const text = response.data?.candidates?.[0]?.output_text?.trim() || "";
-
+        console.log('✅ Gemini API response received');
         
+        const text = response.data?.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || "";
 
         if (!text) {
-            console.warn("Gemini returned empty text. Returning default response.");
+            console.warn("⚠️ Gemini returned empty text");
             return {
                 summary: "No response generated.",
                 sections: []
@@ -104,8 +105,13 @@ const generateResponse = async (prompt, temperature = 0.3, top_p = 0.7) => {
         return structured;
 
     } catch (error) {
-        console.error("Gemini API error:", error.response?.data || error.message);
-        // Return default structured response instead of throwing
+        console.error("❌ Gemini API error:");
+        console.error("   Status:", error.response?.status);
+        console.error("   Message:", error.response?.data || error.message);
+        if (error.response?.data) {
+            console.error("   Full Error:", JSON.stringify(error.response.data, null, 2));
+        }
+        
         return {
             summary: "Sorry, I couldn't generate a response at the moment.",
             sections: []

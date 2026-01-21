@@ -29,7 +29,7 @@ function Talk2GovPage() {
     setLoading(true);
 
     try {
-      const response = await axios.post("https://civicconnectai.onrender.com/api/talk2gov", {
+      const response = await axios.post("http://localhost:8080/api/talk2gov", {
         message: input,
       });
       const aiReply = response.data.reply;
@@ -73,7 +73,7 @@ function Talk2GovPage() {
   };
 
   return (
-    <div className="flex h-screen bg-green-50 text-gray-900 pt-16">
+    <div className="flex h-screen bg-blue-50 text-gray-900 pt-16">
       <FeatureNavbar
         pageActionLabel="+ New Query"
         onActionClick={() => {
@@ -95,7 +95,7 @@ function Talk2GovPage() {
       <Sidebar
         title="Talk2Gov 🏛️"
         subtitle="Discover Government Schemes"
-        themeColor="green"
+        themeColor="blue"
         newChatLabel="+ New Query"
         recentChats={["PM Awas Yojana eligibility", "Jan Dhan Yojana benefits", "Farmer scheme queries"]}
         footerNote="Empowering Citizens, Simplifying Governance"
@@ -105,9 +105,9 @@ function Talk2GovPage() {
       {/* Main Chat Area */}
       <main className="flex-1 flex flex-col bg-white/80 backdrop-blur-sm border-l border-white/20">
         {/* Header */}
-        <header className="p-4 border-b border-white/20 bg-green-100/50 flex items-center justify-between">
-          <h2 className="text-lg font-semibold text-green-800">Talk2Gov Chat</h2>
-          <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full">🏛️ Scheme Finder</span>
+        <header className="p-4 border-b border-white/20 bg-blue-100/50 flex items-center justify-between">
+          <h2 className="text-lg font-semibold text-blue-800">Talk2Gov Chat</h2>
+          <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded-full">🏛️ Scheme Finder</span>
         </header>
 
         {/* Chat Messages */}
@@ -122,8 +122,8 @@ function Talk2GovPage() {
               <div
                 className={`max-w-xl px-4 py-3 rounded-2xl shadow-sm whitespace-pre-wrap ${
                   msg.role === "user"
-                    ? "bg-green-600 text-white rounded-br-none"
-                    : "bg-white text-green-800 border border-green-200 rounded-bl-none"
+                    ? "bg-blue-600 text-white rounded-br-none"
+                    : "bg-white text-blue-800 border border-blue-200 rounded-bl-none"
                 }`}
               >
                 {msg.role === "user" ? (
@@ -133,14 +133,14 @@ function Talk2GovPage() {
                   msg.structured.map((item, idx) => (
                     <div key={idx} className="mb-3 last:mb-0">
                       {item.type === "summary" && (
-                        <p className="font-semibold text-green-800 mb-2">
+                        <p className="font-semibold text-blue-800 mb-2">
                           🧭 Summary: {item.text}
                         </p>
                       )}
 
                       {item.type === "section" && (
                         <div className="mt-2">
-                          <h4 className="font-bold text-green-700 text-base mb-2">
+                          <h4 className="font-bold text-blue-700 text-base mb-2">
                             {item.title}
                           </h4>
                           <div className="space-y-2">
@@ -154,19 +154,19 @@ function Talk2GovPage() {
                                     </span>
                                   </p>
                                 ) : (
-                                  <div className="prose prose-green max-w-none prose-p:my-1 prose-li:my-0 prose-headings:mb-1">
+                                  <div className="prose prose-blue max-w-none prose-p:my-1 prose-li:my-0 prose-headings:mb-1">
                                     <ReactMarkdown>{c.text}</ReactMarkdown>
                                   </div>
                                 )}
                               </div>
                             ))}
                           </div>
-                          <hr className="my-3 border-green-200" />
+                          <hr className="my-3 border-blue-200" />
                         </div>
                       )}
 
                       {item.type === "text" && (
-                        <div className="prose prose-green max-w-none">
+                        <div className="prose prose-blue max-w-none">
                           {item.text}
                         </div>
                       )}
@@ -189,13 +189,13 @@ function Talk2GovPage() {
         </div>
 
         {/* Input Box */}
-        <div className="p-4 border-t border-white/20 bg-green-100/50 flex items-center gap-3">
+        <div className="p-4 border-t border-white/20 bg-blue-100/50 flex items-center gap-3">
           <input
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="Ask about PM Awas Yojana, farmer schemes, health benefits..."
-            className="flex-1 border border-green-200 rounded-full px-4 py-2 text-green-800 placeholder-green-400 focus:outline-none focus:ring-2 focus:ring-green-400 transition"
+            className="flex-1 border border-blue-200 rounded-full px-4 py-2 text-blue-800 placeholder-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
             onKeyDown={(e) => e.key === "Enter" && handleSend()}
           />
           <button
@@ -203,8 +203,8 @@ function Talk2GovPage() {
             disabled={loading}
             className={`px-5 py-2 rounded-full text-white font-semibold transition ${
               loading
-                ? "bg-green-400 cursor-not-allowed"
-                : "bg-green-600 hover:bg-green-700"
+                ? "bg-blue-400 cursor-not-allowed"
+                : "bg-blue-600 hover:bg-blue-700"
             }`}
           >
             {loading ? "Searching..." : "Send"}

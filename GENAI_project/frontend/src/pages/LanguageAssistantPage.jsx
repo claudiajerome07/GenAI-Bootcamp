@@ -45,7 +45,7 @@ function LanguageAssistantPage() {
 
     try {
       // ✅ Call updated backend route
-      const res = await axios.post("https://civicconnectai.onrender.com/api/translate", {
+      const res = await axios.post("http://localhost:8080/api/translate", {
         message: input,
         language: targetLang,
       });
@@ -86,7 +86,7 @@ function LanguageAssistantPage() {
 
 
   return (
-    <div className="flex h-screen bg-purple-50 text-gray-900 pt-16">
+    <div className="flex h-screen bg-blue-50 text-gray-900 pt-16">
       <FeatureNavbar
         pageActionLabel="+ New Translation"
         onActionClick={() => {
@@ -106,7 +106,7 @@ function LanguageAssistantPage() {
       <Sidebar
         title="Language Assistant 🌐"
         subtitle="Your Regional AI Guide"
-        themeColor="purple"
+        themeColor="blue"
         newChatLabel="+ New Translation"
         recentChats={["Legal document translation", "Government scheme explanation", "Technical term simplification"]}
         footerNote="Supports 10+ Indian languages"
@@ -118,18 +118,18 @@ function LanguageAssistantPage() {
       <main className="flex-1 flex flex-col bg-white/80 backdrop-blur-sm border-l border-white/20">
 
         {/* Header */}
-        <header className="p-4 border-b border-white/20 bg-purple-100/50 flex items-center justify-between">
-          <h2 className="text-lg font-semibold text-purple-800">
+        <header className="p-4 border-b border-white/20 bg-blue-100/50 flex items-center justify-between">
+          <h2 className="text-lg font-semibold text-blue-800">
             Local Language Assistant
 
           </h2>
           <div className="flex items-center gap-3">
-            <span className="text-xs bg-purple-100 text-purple-700 px-2 py-1 rounded-full">🌐 Multilingual</span>
+            <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded-full">🌐 Multilingual</span>
             
             <select
               value={targetLang}
               onChange={(e) => setTargetLang(e.target.value)}
-              className="border border-purple-200 rounded-lg px-3 py-1 text-purple-800 focus:ring-2 focus:ring-purple-400 outline-none transition text-sm"
+              className="border border-blue-200 rounded-lg px-3 py-1 text-blue-800 focus:ring-2 focus:ring-blue-400 outline-none transition text-sm"
             >
               <option value="hi">Hindi</option>
               <option value="bn">Bengali</option>
@@ -155,8 +155,8 @@ function LanguageAssistantPage() {
 
                 className={`max-w-xl px-4 py-3 rounded-2xl shadow-sm whitespace-pre-wrap ${
                   msg.role === "user"
-                    ? "bg-purple-600 text-white rounded-br-none"
-                    : "bg-white text-purple-800 border border-purple-200 rounded-bl-none"
+                    ? "bg-blue-600 text-white rounded-br-none"
+                    : "bg-white text-blue-800 border border-blue-200 rounded-bl-none"
                 }`}
 
               >
@@ -167,13 +167,13 @@ function LanguageAssistantPage() {
                   msg.structured.map((item, idx) => (
                     <div key={idx} className="mb-3 last:mb-0">
                       {item.type === "summary" && (
-                        <p className="font-semibold text-purple-800 mb-2">
+                        <p className="font-semibold text-blue-800 mb-2">
                           🔍 {item.text}
                         </p>
                       )}
 
                       {item.type === "text" && (
-                        <div className="prose prose-purple max-w-none">
+                        <div className="prose prose-blue max-w-none">
                           {item.text}
                         </div>
                       )}
@@ -196,7 +196,7 @@ function LanguageAssistantPage() {
 
 
         {/* Input Box */}
-        <div className="p-4 border-t border-white/20 bg-purple-100/50 flex items-center gap-3">
+        <div className="p-4 border-t border-white/20 bg-blue-100/50 flex items-center gap-3">
 
           <input
             type="text"
@@ -204,7 +204,7 @@ function LanguageAssistantPage() {
             onChange={(e) => setInput(e.target.value)}
 
             placeholder="Type or paste text to translate or simplify..."
-            className="flex-1 border border-purple-200 rounded-full px-4 py-2 text-purple-800 placeholder-purple-400 focus:outline-none focus:ring-2 focus:ring-purple-400 transition"
+            className="flex-1 border border-blue-200 rounded-full px-4 py-2 text-blue-800 placeholder-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
 
             onKeyDown={(e) => e.key === "Enter" && handleSend()}
           />
@@ -214,8 +214,8 @@ function LanguageAssistantPage() {
 
             className={`px-5 py-2 rounded-full text-white font-semibold transition ${
               loading
-                ? "bg-purple-400 cursor-not-allowed"
-                : "bg-purple-600 hover:bg-purple-700"
+                ? "bg-blue-400 cursor-not-allowed"
+                : "bg-blue-600 hover:bg-blue-700"
             }`}
 
           >
