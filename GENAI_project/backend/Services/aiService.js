@@ -1,5 +1,5 @@
 const promptManager = require('../utils/promptManager');
-const geminiService = require('../Controller/geminiService');
+const geminiService = require('../controllers/geminiService');
 
 
 async function handleUnifiedChat(req, res) {
